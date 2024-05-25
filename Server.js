@@ -21,6 +21,7 @@ const connectDB = async () => {
       URL
     )
     console.log('Connected to mongoDB')
+
   } catch (error) {
     console.log(error)
     process.exit(1)
