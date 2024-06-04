@@ -1,3 +1,4 @@
+const Point = require("../model/Point");
 const User = require("../model/User");
 const argon = require("argon2");
 
@@ -90,14 +91,6 @@ const authController = {
     }
   },
 
-  // readAllUser: async (req, res) => {
-  //   try {
-  //     const users = await User.find();
-  //     res.status(200).json(users);
-  //   } catch (error) {
-  //     res.status(400).json({ error: error.message });
-  //   }
-  // },
   readAllUser: async (req, res) => {
     try {
       const user = await User.findById(req.params.userId);
@@ -111,28 +104,49 @@ const authController = {
   },
 
   updateUser: async (req, res) => {
-    const { name, email } = req.body;
+    console.log("Request Params:", req.params); // Log request params
+    console.log("Request Body:", req.body);
+    const { username, email } = req.body;
     try {
       const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        { name, email },
+        req.params.userId,
+        { username, email },
         { new: true }
       );
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
       res.status(200).json(updatedUser);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   },
 
+
   deleteUser: async (req, res) => {
     try {
-      await User.findByIdAndDelete(req.params.id);
+      await User.findByIdAndDelete(req.params.userId);
       res.status(200).json({ message: 'User deleted' });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   },
+
+  totalScore: async (req, res) => {
+    const { userId, score } = req.body;
+    try {
+      // Lưu điểm số vào cơ sở dữ liệu
+      const newScore = new Point({ userId, score });
+      await newScore.save();
+      res.json({ success: true, message: 'Score submitted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Failed to submit score' });
+    }
+  },
+
 };
+
 
 // crud ctrl
 

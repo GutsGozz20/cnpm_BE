@@ -11,12 +11,12 @@ const pointSchema = mongoose.Schema({
         type: Number,
         require: true,
     },
-    questionId: {
-        type: String, // Hoặc ObjectId nếu bạn có một mô hình cho câu hỏi
-        required: true
-    },
-    answer: {
-        type: String,
+    // questionId: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true
+    // },
+    isCorrect: {
+        type: Boolean,
         required: true
     },
     date: {
